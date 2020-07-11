@@ -70,12 +70,20 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
 
     const className = 'fret' + (isFocused ? ' blink' : '');
 
-    const onContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-      e.preventDefault();
-      this.props.onFretRightClick(chordIndex, stringIndex, e.clientX, e.clientY);
+    const note: ITabNoteLocation = {
+      chordIndex: chordIndex,
+      stringIndex: stringIndex
     };
 
-    const onClick = () => this.props.onFretClick(chordIndex, stringIndex);
+    const onContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      e.preventDefault();
+      this.props.onNoteRightClick(note, e.clientX, e.clientY);
+    };
+
+    const onClick = () => {
+      this.props.onFocusedNoteChange(note);
+      this.props.onNoteClick(note);
+    };
 
     const fretNumDisplay = fret === null
       ? <span>{isFocused ? '_' : '-'}</span> :
@@ -279,8 +287,8 @@ export interface ITablatureProps {
   focusedNote: ITabNoteLocation;
   onFocusedNoteChange: (focusedNote: ITabNoteLocation) => void;
   onEdit: (chords: (number | null)[][], focusedNote: ITabNoteLocation) => void;
-  onFretClick: (clickedChordIndex: number, clickedStringIndex: number) => void;
-  onFretRightClick: (clickedChordIndex: number, clickedStringIndex: number, x: number, y: number) => void;
+  onNoteClick: (note: ITabNoteLocation) => void;
+  onNoteRightClick: (note: ITabNoteLocation, x: number, y: number) => void;
 }
 
 export interface ITabNoteLocation {

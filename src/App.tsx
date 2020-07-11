@@ -60,9 +60,9 @@ class App extends Component<IAppProps, IAppState> {
     this.setState({ chords, focusedNote });
   }
 
-  onFretClick = (clickedChordIndex: number, clickedStringIndex: number): void => { }
+  onNoteClick = (note: ITabNoteLocation): void => { }
 
-  onFretRightClick = (clickedChordIndex: number, clickedStringIndex: number, x: number, y: number): void => { }
+  onNoteRightClick = (note: ITabNoteLocation, x: number, y: number): void => { }
 
   render() {
     return (
@@ -75,8 +75,8 @@ class App extends Component<IAppProps, IAppState> {
           focusedNote={this.state.focusedNote}
           onFocusedNoteChange={this.onFocusedNoteChange}
           onEdit={this.onEdit}
-          onFretClick={this.onFretClick}
-          onFretRightClick={this.onFretRightClick}
+          onNoteClick={this.onNoteClick}
+          onNoteRightClick={this.onNoteRightClick}
         ></Tablature>
       </div>
     );
