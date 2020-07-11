@@ -8,6 +8,7 @@ interface IAppState {
   chords: (number | null)[][];
   focusedNote: ITabNoteLocation;
   tuning: INote[];
+  maxFretNum: number;
   mapFromNoteLetterEnumToString: Map<NoteLetter, string>;
 }
 
@@ -29,6 +30,7 @@ class App extends Component<IAppProps, IAppState> {
         { letter: NoteLetter.A, octave: 2 },
         { letter: NoteLetter.E, octave: 2 },
       ],
+      maxFretNum: 24,
       mapFromNoteLetterEnumToString: new Map(
         [
           [NoteLetter.Aflat, 'Ab'],
@@ -48,6 +50,14 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
+  onFocusedNoteChange = (focusedNote: ITabNoteLocation) => {
+    this.setState({ focusedNote });
+  }
+
+  onEdit = (chords: (number | null)[][], focusedNote: ITabNoteLocation) => {
+    this.setState({ chords, focusedNote });
+  }
+
   onFretClick = (clickedChordIndex: number, clickedStringIndex: number) => { }
 
   onFretRightClick = (clickedChordIndex: number, clickedStringIndex: number, x: number, y: number) => { }
@@ -58,8 +68,11 @@ class App extends Component<IAppProps, IAppState> {
         <Tablature
           chords={this.state.chords}
           tuning={this.state.tuning}
+          maxFretNum={this.state.maxFretNum}
           mapFromNoteLetterEnumToString={this.state.mapFromNoteLetterEnumToString}
           focusedNote={this.state.focusedNote}
+          onFocusedNoteChange={this.onFocusedNoteChange}
+          onEdit={this.onEdit}
           onFretClick={this.onFretClick}
           onFretRightClick={this.onFretRightClick}
         ></Tablature>
