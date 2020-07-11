@@ -5,6 +5,7 @@ import './App.css';
 interface IAppProps { }
 
 interface IAppState {
+  isFocused: boolean;
   chords: (number | null)[][];
   focusedNote: ITabNoteLocation;
   tuning: INote[];
@@ -17,6 +18,7 @@ class App extends Component<IAppProps, IAppState> {
     super(props);
 
     this.state = {
+      isFocused: false,
       chords: this.getEmptyChords(16, 6),
       focusedNote: {
         chordIndex: 0,
@@ -50,17 +52,17 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
-  onFocusedNoteChange = (focusedNote: ITabNoteLocation) => {
+  onFocusedNoteChange = (focusedNote: ITabNoteLocation): void => {
     this.setState({ focusedNote });
   }
 
-  onEdit = (chords: (number | null)[][], focusedNote: ITabNoteLocation) => {
+  onEdit = (chords: (number | null)[][], focusedNote: ITabNoteLocation): void => {
     this.setState({ chords, focusedNote });
   }
 
-  onFretClick = (clickedChordIndex: number, clickedStringIndex: number) => { }
+  onFretClick = (clickedChordIndex: number, clickedStringIndex: number): void => { }
 
-  onFretRightClick = (clickedChordIndex: number, clickedStringIndex: number, x: number, y: number) => { }
+  onFretRightClick = (clickedChordIndex: number, clickedStringIndex: number, x: number, y: number): void => { }
 
   render() {
     return (

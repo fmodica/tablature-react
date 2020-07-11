@@ -2,12 +2,21 @@ import React, { Component } from 'react';
 import './tablature.css';
 
 export class Tablature extends Component<ITablatureProps, ITablatureState> {
+  constructor(props: ITablatureProps) {
+    super(props);
+
+    this.state = { editorIsFocused: false };
+  }
+
   render(): JSX.Element {
     const tuningDisplay = this.getTuningDisplay();
     const chordsDisplay = this.getChordsDisplay();
 
+    // To get around TS errors
+    const tabIndexAttr = { tabIndex: 0 };
+
     return (
-      <div className='tablature'>
+      <div className='tablature' {...tabIndexAttr} onFocus={this.onFocus} onBlur={this.onBlur}>
         <div className='chord tuning'>
           {tuningDisplay}
         </div>
@@ -55,7 +64,10 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
   }
 
   private getFretDisplay(chordIndex: number, stringIndex: number, fret: number | null): JSX.Element {
-    const isFocused = this.props.focusedNote.chordIndex === chordIndex && this.props.focusedNote.stringIndex === stringIndex;
+    const isFocused = this.state.editorIsFocused &&
+      this.props.focusedNote.chordIndex === chordIndex &&
+      this.props.focusedNote.stringIndex === stringIndex;
+
     const className = 'fret' + (isFocused ? ' blink' : '');
 
     const onContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
@@ -76,7 +88,19 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     );
   }
 
+  private onFocus = (): void => {
+    this.setState({ editorIsFocused: true });
+  }
+
+  private onBlur = (): void => {
+    this.setState({ editorIsFocused: false });
+  }
+
   private onKeyDown = (event: KeyboardEvent): void => {
+    if (!this.state.editorIsFocused) {
+      return;
+    }
+
     // Insert
     if (event.keyCode === 45 && event.shiftKey) {
       let newChords = [...this.props.chords];
@@ -243,7 +267,9 @@ export interface INote {
   octave: number;
 }
 
-interface ITablatureState { }
+interface ITablatureState {
+  editorIsFocused: boolean;
+}
 
 export interface ITablatureProps {
   chords: (number | null)[][];
