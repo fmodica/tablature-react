@@ -60,9 +60,9 @@ class App extends Component<IAppProps, IAppState> {
     this.setState({ chords, focusedNote });
   }
 
-  onNoteClick = (note: ITabNoteLocation): void => { }
+  onNoteClick = (note: ITabNoteLocation, e: React.MouseEvent<HTMLElement>): void => { }
 
-  onNoteRightClick = (note: ITabNoteLocation, x: number, y: number): void => { }
+  onNoteRightClick = (note: ITabNoteLocation, e: React.MouseEvent<HTMLElement>): void => { }
 
   render() {
     return (

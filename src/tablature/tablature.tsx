@@ -75,14 +75,14 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
       stringIndex: stringIndex
     };
 
-    const onContextMenu = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const onContextMenu = (e: React.MouseEvent<HTMLElement>) => {
       e.preventDefault();
-      this.props.onNoteRightClick(note, e.clientX, e.clientY);
+      this.props.onNoteRightClick(note, e);
     };
 
-    const onClick = () => {
+    const onClick = (e: React.MouseEvent<HTMLElement>) => {
       this.props.onFocusedNoteChange(note);
-      this.props.onNoteClick(note);
+      this.props.onNoteClick(note, e);
     };
 
     const fretNumDisplay = fret === null
@@ -287,8 +287,8 @@ export interface ITablatureProps {
   focusedNote: ITabNoteLocation;
   onFocusedNoteChange: (focusedNote: ITabNoteLocation) => void;
   onEdit: (chords: (number | null)[][], focusedNote: ITabNoteLocation) => void;
-  onNoteClick: (note: ITabNoteLocation) => void;
-  onNoteRightClick: (note: ITabNoteLocation, x: number, y: number) => void;
+  onNoteClick: (note: ITabNoteLocation, e: React.MouseEvent<HTMLElement>) => void;
+  onNoteRightClick: (note: ITabNoteLocation, e: React.MouseEvent<HTMLElement>) => void;
 }
 
 export interface ITabNoteLocation {
