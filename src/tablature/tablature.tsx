@@ -16,11 +16,9 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     const tabIndexAttr = { tabIndex: 0 };
 
     return (
-      <div className='tablature' {...tabIndexAttr} onFocus={this.onFocus} onBlur={this.onBlur}>
-        <div className='chord tuning'>
+      <div className='tablature-container'>
+        <div className='tablature' {...tabIndexAttr} onFocus={this.onFocus} onBlur={this.onBlur}>
           {tuningDisplay}
-        </div>
-        <div className='chord-display'>
           {chordsDisplay}
         </div>
       </div>
@@ -35,10 +33,16 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     document.removeEventListener('keydown', this.onKeyDown);
   }
 
-  private getTuningDisplay(): JSX.Element[] {
-    return this.props.tuning.map((tuningNote, index) => {
+  private getTuningDisplay(): JSX.Element {
+    const fretsDisplay = this.props.tuning.map((tuningNote, index) => {
       return <div className='fret' key={index}>{this.props.mapFromNoteLetterEnumToString.get(tuningNote.letter)}</div>;
     });
+
+    return (
+      <div className='chord tuning'>
+        {fretsDisplay}
+      </div>
+    );
   }
 
   private getChordsDisplay(): JSX.Element[] {

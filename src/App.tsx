@@ -66,7 +66,7 @@ class App extends Component<IAppProps, IAppState> {
 
   render() {
     return (
-      <div className="App">
+      <div className="app">
         <Tablature
           chords={this.state.chords}
           tuning={this.state.tuning}
