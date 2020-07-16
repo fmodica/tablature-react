@@ -14,6 +14,8 @@ interface IAppState {
 }
 
 class App extends Component<IAppProps, IAppState> {
+  private tabsKey = 'tabs';
+
   constructor(props: IAppProps) {
     super(props);
 
@@ -52,7 +54,20 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
+  componentDidMount(): void {
+    const savedChordsStr = window.localStorage.getItem(this.tabsKey);
+
+    if (!savedChordsStr) {
+      return;
+    }
+
+    const chords: (number | null)[][] = JSON.parse(savedChordsStr);
+
+    this.onEdit(chords, this.state.focusedNote);
+  }
+
   onKeyBoardNavigation = (newFocusedNote: ITabNoteLocation, e: KeyboardEvent): void => {
+    e.preventDefault();
     this.setState({ focusedNote: newFocusedNote })
   }
 
@@ -62,6 +77,7 @@ class App extends Component<IAppProps, IAppState> {
 
   onEdit = (newChords: (number | null)[][], newFocusedNote: ITabNoteLocation): void => {
     this.setState({ chords: newChords, focusedNote: newFocusedNote });
+    window.localStorage.setItem(this.tabsKey, JSON.stringify(newChords));
   }
 
   onNoteClick = (newFocusedNote: ITabNoteLocation, e: React.MouseEvent): void => {
