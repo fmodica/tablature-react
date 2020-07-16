@@ -52,17 +52,21 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
-  onFocusedNoteChange = (focusedNote: ITabNoteLocation): void => {
-    this.setState({ focusedNote });
+  onKeyBoardNavigation = (newFocusedNote: ITabNoteLocation, e: KeyboardEvent): void => {
+    this.setState({ focusedNote: newFocusedNote })
   }
 
-  onEdit = (chords: (number | null)[][], focusedNote: ITabNoteLocation): void => {
-    this.setState({ chords, focusedNote });
+  onFocusedNoteChange = (newFocusedNote: ITabNoteLocation): void => {
+    this.setState({ focusedNote: newFocusedNote });
   }
 
-  onNoteClick = (note: ITabNoteLocation, e: React.MouseEvent<HTMLElement>): void => { }
+  onEdit = (newChords: (number | null)[][], newFocusedNote: ITabNoteLocation): void => {
+    this.setState({ chords: newChords, focusedNote: newFocusedNote });
+  }
 
-  onNoteRightClick = (note: ITabNoteLocation, e: React.MouseEvent<HTMLElement>): void => { }
+  onNoteClick = (newFocusedNote: ITabNoteLocation, e: React.MouseEvent): void => { }
+
+  onNoteRightClick = (newFocusedNote: ITabNoteLocation, e: React.MouseEvent): void => { }
 
   render() {
     return (
@@ -73,7 +77,7 @@ class App extends Component<IAppProps, IAppState> {
           maxFretNum={this.state.maxFretNum}
           mapFromNoteLetterEnumToString={this.state.mapFromNoteLetterEnumToString}
           focusedNote={this.state.focusedNote}
-          onFocusedNoteChange={this.onFocusedNoteChange}
+          onKeyBoardNavigation={this.onKeyBoardNavigation}
           onEdit={this.onEdit}
           onNoteClick={this.onNoteClick}
           onNoteRightClick={this.onNoteRightClick}
