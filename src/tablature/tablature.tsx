@@ -1,5 +1,6 @@
-import React, { Component, Key } from 'react';
+import React, { Component } from 'react';
 import './tablature.css';
+import { Chord } from './chord';
 
 export class Tablature extends Component<ITablatureProps, ITablatureState> {
   constructor(props: ITablatureProps) {
@@ -9,8 +10,8 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
   }
 
   render(): JSX.Element {
-    const tuningDisplay = this.getTuningDisplay();
-    const chordsDisplay = this.getChordsDisplay();
+    const tuningDisplay = this.getTuningElement();
+    const chordsDisplay = this.getChordElements();
 
     // To get around TS errors
     const tabIndexAttr = { tabIndex: 0 };
@@ -33,8 +34,8 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     document.removeEventListener('keydown', this.onKeyDown);
   }
 
-  private getTuningDisplay(): JSX.Element {
-    const tuningNotesDisplay = this.getTuningNotesDisplay();
+  private getTuningElement(): JSX.Element {
+    const tuningNotesDisplay = this.getTuningNoteElements();
 
     return (
       <div className='chord tuning'>
@@ -43,68 +44,37 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     );
   }
 
-  private getTuningNotesDisplay() {
+  private getTuningNoteElements(): JSX.Element[] {
     return this.props.tuning.map((tuningNote, index) => {
       return <div className='fret' key={index}>{this.props.mapFromNoteLetterEnumToString.get(tuningNote.letter)}</div>;
     });
   }
 
-  private getChordsDisplay(): JSX.Element[] {
-    return this.props.chords.map((chord, index) => {
-      return this.getChordDisplay(chord, index);
-    });
-  }
+  private getChordElements(): JSX.Element[] {
+    return this.props.chords.map((chord, chordIndex) => {
+      const indexOfFocusedString = chordIndex === this.props.focusedNote.chordIndex
+        ? this.props.focusedNote.stringIndex
+        : null;
 
-  private getChordDisplay(chord: (number | null)[], chordIndex: number): JSX.Element {
-    const fretsDisplay = this.getFretsDisplay(chord, chordIndex);
-
-    return (
-      <div className='chord' key={chordIndex}>
-        {fretsDisplay}
-      </div>
-    );
-  }
-
-  private getFretsDisplay(chord: (number | null)[], chordIndex: number): JSX.Element[] {
-    return chord.map((fret, stringIndex) => {
-      return this.getFretDisplay(chordIndex, stringIndex, fret);
-    });
-  }
-
-  private getFretDisplay(chordIndex: number, stringIndex: number, fret: number | null): JSX.Element {
-    const isFocused = this.state.editorIsFocused &&
-      this.props.focusedNote.chordIndex === chordIndex &&
-      this.props.focusedNote.stringIndex === stringIndex;
-
-    const onContextMenu = (e: React.MouseEvent) => {
-      const newFocusedNote: ITabNoteLocation = {
-        chordIndex: chordIndex,
-        stringIndex: stringIndex
+      const onNoteClick = (stringIndex: number, e: React.MouseEvent) => {
+        const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
+        this.props.onNoteClick(newFocusedNote, e);
       };
 
-      this.props.onNoteRightClick(newFocusedNote, e);
-    };
-
-    const onClick = (e: React.MouseEvent) => {
-      const newFocusedNote: ITabNoteLocation = {
-        chordIndex: chordIndex,
-        stringIndex: stringIndex
+      const onNoteRightClick = (stringIndex: number, e: React.MouseEvent) => {
+        const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
+        this.props.onNoteRightClick(newFocusedNote, e);
       };
 
-      this.props.onNoteClick(newFocusedNote, e);
-    };
-
-    const className = 'fret' + (isFocused ? ' blink' : '');
-
-    const fretNumDisplay = fret === null
-      ? <span>{isFocused ? '_' : '-'}</span> :
-      fret;
-
-    return (
-      <div className={className} key={stringIndex} onClick={onClick} onContextMenu={onContextMenu}>
-        {fretNumDisplay}
-      </div>
-    );
+      return (
+        <Chord
+          key={chordIndex}
+          indexOfFocusedString={indexOfFocusedString}
+          notes={chord}
+          onNoteClick={onNoteClick}
+          onNoteRightClick={onNoteRightClick} />
+      );
+    });
   }
 
   private onFocus = (): void => {
