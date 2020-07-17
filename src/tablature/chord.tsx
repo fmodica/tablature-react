@@ -13,6 +13,11 @@ export class Chord extends Component<IChordProps, IChordState> {
     );
   }
 
+  shouldComponentUpdate(nextProps: Readonly<IChordProps>): boolean {
+    return this.props.indexOfFocusedString !== nextProps.indexOfFocusedString
+      || this.props.notes !== nextProps.notes;
+  }
+
   private getFretElement(stringIndex: number, fret: number | null): JSX.Element {
     const isFocused = stringIndex === this.props.indexOfFocusedString;
     const className = 'fret' + (isFocused ? ' blink' : '');
