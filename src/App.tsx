@@ -42,12 +42,12 @@ class App extends Component<IAppProps, IAppState> {
           [NoteLetter.Bflat, 'Bb'],
           [NoteLetter.B, 'B'],
           [NoteLetter.C, 'C'],
-          [NoteLetter.Csharp, 'C#'],
+          [NoteLetter.Dflat, 'C#'],
           [NoteLetter.D, 'D'],
           [NoteLetter.Eflat, 'Eb'],
           [NoteLetter.E, 'E'],
           [NoteLetter.F, 'F'],
-          [NoteLetter.Fsharp, 'F#'],
+          [NoteLetter.Gflat, 'F#'],
           [NoteLetter.G, 'G']
         ]
       )

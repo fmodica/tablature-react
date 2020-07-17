@@ -102,19 +102,15 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
         this.clearNote(e);
       }
     }
-    // Left
     else if (e.keyCode === 37) {
       this.goLeft(e);
     }
-    // Right
     else if (e.keyCode === 39) {
       this.goRight(e);
     }
-    // Up
     else if (e.keyCode === 38) {
       this.goUp(e);
     }
-    // Down
     else if (e.keyCode === 40) {
       this.goDown(e);
     } else {
@@ -245,12 +241,12 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
 
 export enum NoteLetter {
   C,
-  Csharp,
+  Dflat,
   D,
   Eflat,
   E,
   F,
-  Fsharp,
+  Gflat,
   G,
   Aflat,
   A,
