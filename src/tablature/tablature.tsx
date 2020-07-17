@@ -52,7 +52,7 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
 
   private getChordElements(): JSX.Element[] {
     return this.props.chords.map((chord, chordIndex) => {
-      const indexOfFocusedString = chordIndex === this.props.focusedNote.chordIndex
+      const indexOfFocusedString = (chordIndex === this.props.focusedNote.chordIndex && this.state.editorIsFocused)
         ? this.props.focusedNote.stringIndex
         : null;
 
@@ -92,17 +92,14 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
 
     // Insert
     if (e.keyCode === 45 && e.shiftKey) {
-      let newChords = [...this.props.chords];
-      newChords.splice(this.props.focusedNote.chordIndex + 1, 0, this.getAllNulls(6));
-
-      this.props.onEdit(newChords, this.props.focusedNote, e);
+      this.insertChord(e);
     }
     // Delete / Backspace
     else if (e.keyCode === 46 || e.keyCode === 8) {
       if (e.shiftKey) {
-        this.clearCurrentlyFocusedChord(e);
+        this.clearChord(e);
       } else {
-        this.clearCurrentlyFocusedNote(e);
+        this.clearNote(e);
       }
     }
     // Left
@@ -125,7 +122,14 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     }
   };
 
-  private clearCurrentlyFocusedChord(e: KeyboardEvent): void {
+  private insertChord(e: KeyboardEvent) {
+    let newChords = [...this.props.chords];
+    newChords.splice(this.props.focusedNote.chordIndex + 1, 0, this.getAllNulls(6));
+
+    this.props.onEdit(newChords, this.props.focusedNote, e);
+  }
+
+  private clearChord(e: KeyboardEvent): void {
     if (this.props.chords.length === 1) {
       return;
     }
@@ -142,7 +146,7 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     this.props.onEdit(newChords, newFocusedNote, e);
   }
 
-  private clearCurrentlyFocusedNote(e: KeyboardEvent): void {
+  private clearNote(e: KeyboardEvent): void {
     const newChords = [...this.props.chords];
     const newChord = [...newChords[this.props.focusedNote.chordIndex]];
 
@@ -196,7 +200,7 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     const typedText = e.key;
 
     if (typedText.trim() === '') {
-      this.clearCurrentlyFocusedNote(e);
+      this.clearNote(e);
       return;
     }
 
