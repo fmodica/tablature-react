@@ -2,18 +2,7 @@ import React, { Component } from 'react';
 import { Tablature, ITabNoteLocation, INote, NoteLetter } from './tablature/tablature';
 import './App.css';
 
-interface IAppProps { }
-
-interface IAppState {
-  isFocused: boolean;
-  chords: (number | null)[][];
-  focusedNote: ITabNoteLocation;
-  tuning: INote[];
-  maxFretNum: number;
-  mapFromNoteLetterEnumToString: Map<NoteLetter, string>;
-}
-
-class App extends Component<IAppProps, IAppState> {
+export default class App extends Component<IAppProps, IAppState> {
   private tabsKey = 'tabs';
 
   constructor(props: IAppProps) {
@@ -54,6 +43,24 @@ class App extends Component<IAppProps, IAppState> {
     };
   }
 
+  render(): JSX.Element {
+    return (
+      <div className="app">
+        <Tablature
+          chords={this.state.chords}
+          tuning={this.state.tuning}
+          maxFretNum={this.state.maxFretNum}
+          mapFromNoteLetterEnumToString={this.state.mapFromNoteLetterEnumToString}
+          focusedNote={this.state.focusedNote}
+          onKeyBoardNavigation={this.onKeyBoardNavigation}
+          onEdit={this.onEdit}
+          onNoteClick={this.onNoteClick}
+          onNoteRightClick={this.onNoteRightClick}
+        ></Tablature>
+      </div>
+    );
+  }
+
   componentDidMount(): void {
     const savedChordsStr = window.localStorage.getItem(this.tabsKey);
 
@@ -86,24 +93,6 @@ class App extends Component<IAppProps, IAppState> {
 
   onNoteRightClick = (noteClicked: ITabNoteLocation, e: React.MouseEvent): void => { }
 
-  render() {
-    return (
-      <div className="app">
-        <Tablature
-          chords={this.state.chords}
-          tuning={this.state.tuning}
-          maxFretNum={this.state.maxFretNum}
-          mapFromNoteLetterEnumToString={this.state.mapFromNoteLetterEnumToString}
-          focusedNote={this.state.focusedNote}
-          onKeyBoardNavigation={this.onKeyBoardNavigation}
-          onEdit={this.onEdit}
-          onNoteClick={this.onNoteClick}
-          onNoteRightClick={this.onNoteRightClick}
-        ></Tablature>
-      </div>
-    );
-  }
-
   private getEmptyChords(numChords: number, numFrets: number): null[][] {
     return new Array(numChords).fill(this.getAllNulls(numFrets));
   }
@@ -113,4 +102,13 @@ class App extends Component<IAppProps, IAppState> {
   }
 }
 
-export default App;
+interface IAppProps { }
+
+interface IAppState {
+  isFocused: boolean;
+  chords: (number | null)[][];
+  focusedNote: ITabNoteLocation;
+  tuning: INote[];
+  maxFretNum: number;
+  mapFromNoteLetterEnumToString: Map<NoteLetter, string>;
+}

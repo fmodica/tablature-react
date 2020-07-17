@@ -56,12 +56,12 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
         ? this.props.focusedNote.stringIndex
         : null;
 
-      const onNoteClick = (stringIndex: number, e: React.MouseEvent) => {
+      const onNoteClick = (stringIndex: number, e: React.MouseEvent): void => {
         const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
         this.props.onNoteClick(newFocusedNote, e);
       };
 
-      const onNoteRightClick = (stringIndex: number, e: React.MouseEvent) => {
+      const onNoteRightClick = (stringIndex: number, e: React.MouseEvent): void => {
         const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
         this.props.onNoteRightClick(newFocusedNote, e);
       };
@@ -118,7 +118,7 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     }
   };
 
-  private insertChord(e: KeyboardEvent) {
+  private insertChord(e: KeyboardEvent): void {
     let newChords = [...this.props.chords];
     newChords.splice(this.props.focusedNote.chordIndex + 1, 0, this.getAllNulls(6));
 
