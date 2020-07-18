@@ -8,44 +8,14 @@ export default class App extends Component<IAppProps, IAppState> {
   constructor(props: IAppProps) {
     super(props);
 
-    this.state = {
-      isFocused: false,
-      chords: this.getEmptyChords(16, 6),
-      focusedNote: {
-        chordIndex: 0,
-        stringIndex: 0
-      },
-      tuning: [
-        { letter: NoteLetter.E, octave: 4 },
-        { letter: NoteLetter.B, octave: 3 },
-        { letter: NoteLetter.G, octave: 3 },
-        { letter: NoteLetter.D, octave: 3 },
-        { letter: NoteLetter.A, octave: 2 },
-        { letter: NoteLetter.E, octave: 2 },
-      ],
-      maxFretNum: 24,
-      mapFromNoteLetterEnumToString: new Map(
-        [
-          [NoteLetter.Aflat, 'Ab'],
-          [NoteLetter.A, 'A'],
-          [NoteLetter.Bflat, 'Bb'],
-          [NoteLetter.B, 'B'],
-          [NoteLetter.C, 'C'],
-          [NoteLetter.Dflat, 'C#'],
-          [NoteLetter.D, 'D'],
-          [NoteLetter.Eflat, 'Eb'],
-          [NoteLetter.E, 'E'],
-          [NoteLetter.F, 'F'],
-          [NoteLetter.Gflat, 'F#'],
-          [NoteLetter.G, 'G']
-        ]
-      )
-    };
+    this.state = this.getInitialState();
   }
 
   render(): JSX.Element {
     return (
       <div className="app">
+        <button className='reset-btn' onClick={this.onReset}>Reset</button>
+
         <Tablature
           chords={this.state.chords}
           tuning={this.state.tuning}
@@ -92,6 +62,47 @@ export default class App extends Component<IAppProps, IAppState> {
   }
 
   onNoteRightClick = (noteClicked: ITabNoteLocation, e: React.MouseEvent): void => { }
+
+  onReset = (): void => {
+    window.localStorage.removeItem(this.tabsKey);
+    this.setState(this.getInitialState());
+  }
+
+  private getInitialState(): IAppState {
+    return {
+      isFocused: false,
+      chords: this.getEmptyChords(16, 6),
+      focusedNote: {
+        chordIndex: 0,
+        stringIndex: 0
+      },
+      tuning: [
+        { letter: NoteLetter.E, octave: 4 },
+        { letter: NoteLetter.B, octave: 3 },
+        { letter: NoteLetter.G, octave: 3 },
+        { letter: NoteLetter.D, octave: 3 },
+        { letter: NoteLetter.A, octave: 2 },
+        { letter: NoteLetter.E, octave: 2 },
+      ],
+      maxFretNum: 24,
+      mapFromNoteLetterEnumToString: new Map(
+        [
+          [NoteLetter.Aflat, 'Ab'],
+          [NoteLetter.A, 'A'],
+          [NoteLetter.Bflat, 'Bb'],
+          [NoteLetter.B, 'B'],
+          [NoteLetter.C, 'C'],
+          [NoteLetter.Dflat, 'C#'],
+          [NoteLetter.D, 'D'],
+          [NoteLetter.Eflat, 'Eb'],
+          [NoteLetter.E, 'E'],
+          [NoteLetter.F, 'F'],
+          [NoteLetter.Gflat, 'F#'],
+          [NoteLetter.G, 'G']
+        ]
+      )
+    };
+  }
 
   private getEmptyChords(numChords: number, numFrets: number): null[][] {
     return new Array(numChords).fill(this.getAllNulls(numFrets));

@@ -2,3 +2,9 @@
   overflow: hidden;
   padding: 40px;
 }
+
+.app .reset-btn {
+  float: right;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
