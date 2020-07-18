@@ -5,7 +5,6 @@ import { Chord } from './chord';
 export class Tablature extends Component<ITablatureProps, ITablatureState> {
   constructor(props: ITablatureProps) {
     super(props);
-
     this.state = { editorIsFocused: false };
   }
 

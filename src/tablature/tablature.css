@@ -1,12 +1,11 @@
 .tablature-container {
   float: left;
   width: 100%;
+  overflow-x: auto;
 }
 
 .tablature {
-  float: left;
-  width: 100%;
-  overflow-x: auto;
+  display: inline-flex;
   outline: none;
 }
 
