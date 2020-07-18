@@ -78,7 +78,11 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
   }
 
   private onFocus = (): void => {
-    this.setState({ editorIsFocused: true });
+    // Hack: The focus event fires and renders before the click event renders the newly focused note. So
+    // there is a moment where the initial focused note is shown.
+    setTimeout(() => {
+      this.setState({ editorIsFocused: true });
+    }, 100);
   };
 
   private onBlur = (): void => {
