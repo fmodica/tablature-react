@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
-export class Chord extends Component<IChordProps, IChordState> {
+export class Chord extends PureComponent<IChordProps, IChordState> {
   render(): JSX.Element {
     const fretElements: JSX.Element[] = this.props.notes.map((fret, stringIndex) => {
       return <div key={stringIndex}>{this.getFretElement(stringIndex, fret)}</div>;
@@ -11,11 +11,6 @@ export class Chord extends Component<IChordProps, IChordState> {
         {fretElements}
       </div>
     );
-  }
-
-  shouldComponentUpdate(nextProps: Readonly<IChordProps>): boolean {
-    return this.props.indexOfFocusedString !== nextProps.indexOfFocusedString
-      || this.props.notes !== nextProps.notes;
   }
 
   private getFretElement(stringIndex: number, fret: number | null): JSX.Element {
@@ -29,8 +24,8 @@ export class Chord extends Component<IChordProps, IChordState> {
     return (
       <div
         className={className}
-        onClick={e => this.props.onNoteClick(stringIndex, e)}
-        onContextMenu={e => this.props.onNoteRightClick(stringIndex, e)}>
+        onClick={e => this.props.onNoteClick(this.props.chordIndex, stringIndex, e)}
+        onContextMenu={e => this.props.onNoteRightClick(this.props.chordIndex, stringIndex, e)}>
         {fretNumDisplay}
       </div>
     );
@@ -38,10 +33,11 @@ export class Chord extends Component<IChordProps, IChordState> {
 }
 
 export interface IChordProps {
+  chordIndex: number;
   indexOfFocusedString: number | null;
   notes: (number | null)[];
-  onNoteClick: (stringIndex: number, e: React.MouseEvent) => void;
-  onNoteRightClick: (stringIndex: number, e: React.MouseEvent) => void;
+  onNoteClick: (chordIndex: number, stringIndex: number, e: React.MouseEvent) => void;
+  onNoteRightClick: (chordIndex: number, stringIndex: number, e: React.MouseEvent) => void;
 }
 
 interface IChordState { }

@@ -33,6 +33,16 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
     document.removeEventListener('keydown', this.onKeyDown);
   }
 
+  onNoteClick = (chordIndex: number, stringIndex: number, e: React.MouseEvent): void => {
+    const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
+    this.props.onNoteClick(newFocusedNote, e);
+  };
+
+  onNoteRightClick = (chordIndex: number, stringIndex: number, e: React.MouseEvent): void => {
+    const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
+    this.props.onNoteRightClick(newFocusedNote, e);
+  };
+
   private getTuningElement(): JSX.Element {
     const tuningNotesDisplay = this.getTuningNoteElements();
 
@@ -55,23 +65,14 @@ export class Tablature extends Component<ITablatureProps, ITablatureState> {
         ? this.props.focusedNote.stringIndex
         : null;
 
-      const onNoteClick = (stringIndex: number, e: React.MouseEvent): void => {
-        const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
-        this.props.onNoteClick(newFocusedNote, e);
-      };
-
-      const onNoteRightClick = (stringIndex: number, e: React.MouseEvent): void => {
-        const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
-        this.props.onNoteRightClick(newFocusedNote, e);
-      };
-
       return (
         <Chord
           key={chordIndex}
+          chordIndex={chordIndex}
           indexOfFocusedString={indexOfFocusedString}
           notes={chord}
-          onNoteClick={onNoteClick}
-          onNoteRightClick={onNoteRightClick} />
+          onNoteClick={this.onNoteClick}
+          onNoteRightClick={this.onNoteRightClick} />
       );
     });
   }
