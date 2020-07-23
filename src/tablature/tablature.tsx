@@ -95,16 +95,12 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
     }
 
     // Insert
-    if (e.keyCode === 45 && e.shiftKey) {
+    if (e.keyCode === 45) {
       this.insertChord(e);
     }
     // Delete / Backspace
     else if (e.keyCode === 46 || e.keyCode === 8) {
-      if (e.shiftKey) {
-        this.clearChord(e);
-      } else {
-        this.clearNote(e);
-      }
+      this.clearChord(e);
     }
     else if (e.keyCode === 37) {
       this.goLeft(e);
@@ -124,7 +120,7 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
 
   private insertChord(e: KeyboardEvent): void {
     let newChords = [...this.props.chords];
-    newChords.splice(this.props.focusedNote.chordIndex + 1, 0, this.getAllNulls(6));
+    newChords.splice(this.props.focusedNote.chordIndex, 0, this.getAllNulls(6));
 
     this.props.onEdit(newChords, this.props.focusedNote, e);
   }
