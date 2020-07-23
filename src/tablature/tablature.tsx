@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import './tablature.css';
 import { Chord } from './chord';
 
-export class Tablature extends Component<ITablatureProps, ITablatureState> {
+export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   constructor(props: ITablatureProps) {
     super(props);
     this.state = { editorIsFocused: false };
