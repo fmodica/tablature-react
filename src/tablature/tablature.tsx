@@ -61,7 +61,7 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
 
   private getChordElements(): JSX.Element[] {
     return this.props.chords.map((chord, chordIndex) => {
-      const indexOfFocusedString = (chordIndex === this.props.focusedNote.chordIndex && this.state.editorIsFocused)
+      const indexOfFocusedString = (chordIndex === this.props.focusedNote?.chordIndex && this.state.editorIsFocused)
         ? this.props.focusedNote.stringIndex
         : null;
 
@@ -119,6 +119,10 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   };
 
   private insertChord(e: KeyboardEvent): void {
+    if (this.props.focusedNote === null) {
+      return;
+    }
+
     let newChords = [...this.props.chords];
     newChords.splice(this.props.focusedNote.chordIndex, 0, this.getAllNulls(6));
 
@@ -126,6 +130,10 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   }
 
   private clearChord(e: KeyboardEvent): void {
+    if (this.props.focusedNote === null) {
+      return;
+    }
+
     if (this.props.chords.length === 1) {
       return;
     }
@@ -143,6 +151,10 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   }
 
   private clearNote(e: KeyboardEvent): void {
+    if (this.props.focusedNote === null) {
+      return;
+    }
+
     const newChords = [...this.props.chords];
     const newChord = [...newChords[this.props.focusedNote.chordIndex]];
 
@@ -153,6 +165,10 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   }
 
   private goUp = (e: KeyboardEvent): void => {
+    if (this.props.focusedNote === null) {
+      return;
+    }
+
     const newFocusedNote = { ...this.props.focusedNote };
 
     newFocusedNote.stringIndex = newFocusedNote.stringIndex === 0
@@ -163,6 +179,10 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   }
 
   private goRight(e: KeyboardEvent): void {
+    if (this.props.focusedNote === null) {
+      return;
+    }
+
     const newFocusedNote = { ...this.props.focusedNote };
 
     newFocusedNote.chordIndex = newFocusedNote.chordIndex === this.props.chords.length - 1
@@ -173,6 +193,10 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   }
 
   private goDown(e: KeyboardEvent): void {
+    if (this.props.focusedNote === null) {
+      return;
+    }
+
     const newFocusedNote = { ...this.props.focusedNote };
 
     newFocusedNote.stringIndex = newFocusedNote.stringIndex === this.props.tuning.length - 1
@@ -183,6 +207,10 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   }
 
   private goLeft(e: KeyboardEvent): void {
+    if (this.props.focusedNote === null) {
+      return;
+    }
+
     const newFocusedNote = { ...this.props.focusedNote };
 
     newFocusedNote.chordIndex = newFocusedNote.chordIndex === 0
@@ -193,6 +221,10 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   }
 
   private onNoteTyped(e: KeyboardEvent): void {
+    if (this.props.focusedNote === null) {
+      return;
+    }
+
     const typedText = e.key;
 
     if (typedText.trim() === '') {
@@ -208,7 +240,9 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
 
     const newChords = [...this.props.chords];
     const newChord = [...newChords[this.props.focusedNote.chordIndex]];
-    const newFretNum = this.getNewFretNumber(newChord, typedText);
+
+    const currentFret: (number | null) = newChord[this.props.focusedNote.stringIndex];
+    const newFretNum = this.getNewFretNumber(currentFret, typedText);
 
     if (newFretNum <= this.props.maxFretNum) {
       newChord[this.props.focusedNote.stringIndex] = newFretNum;
@@ -221,9 +255,7 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
     this.props.onEdit(newChords, this.props.focusedNote, e);
   }
 
-  private getNewFretNumber(chord: (number | null)[], typedNumberAsString: string): number {
-    const currentFretAsNumber: (number | null) = chord[this.props.focusedNote.stringIndex];
-
+  private getNewFretNumber(currentFretAsNumber: number | null, typedNumberAsString: string): number {
     const currentFretAsString: string = currentFretAsNumber === null
       ? ''
       : currentFretAsNumber.toString();
@@ -268,7 +300,7 @@ export interface ITablatureProps {
   tuning: INote[];
   maxFretNum: number;
   mapFromNoteLetterEnumToString: Map<NoteLetter, string>;
-  focusedNote: ITabNoteLocation;
+  focusedNote: ITabNoteLocation | null;
   onKeyBoardNavigation: (newFocusedNote: ITabNoteLocation, e: KeyboardEvent) => void;
   onEdit: (newChords: (number | null)[][], newFocusedNote: ITabNoteLocation, e: KeyboardEvent) => void;
   onNoteClick: (newFocusedNote: ITabNoteLocation, e: React.MouseEvent) => void;

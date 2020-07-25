@@ -14,8 +14,8 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
   }
 
   private getFretElement(stringIndex: number, fret: number | null): JSX.Element {
-    const isFocused = stringIndex === this.props.indexOfFocusedString;
-    const className = 'fret' + (isFocused ? ' blink' : '');
+    const isFocused: boolean = stringIndex === this.props.indexOfFocusedString;
+    const className: string = 'fret' + (isFocused ? ' blink' : '');
 
     const fretNumDisplay = fret === null
       ? <span>{isFocused ? '_' : '-'}</span> :

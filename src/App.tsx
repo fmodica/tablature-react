@@ -40,7 +40,7 @@ export default class App extends Component<IAppProps, IAppState> {
 
     const chords: (number | null)[][] = JSON.parse(savedChordsStr);
 
-    this.onEdit(chords, this.state.focusedNote);
+    this.setState({ chords: chords });
   }
 
   onKeyBoardNavigation = (newFocusedNote: ITabNoteLocation, e: KeyboardEvent): void => {
@@ -118,7 +118,7 @@ interface IAppProps { }
 interface IAppState {
   isFocused: boolean;
   chords: (number | null)[][];
-  focusedNote: ITabNoteLocation;
+  focusedNote: ITabNoteLocation | null;
   tuning: INote[];
   maxFretNum: number;
   mapFromNoteLetterEnumToString: Map<NoteLetter, string>;
