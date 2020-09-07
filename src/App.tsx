@@ -61,7 +61,7 @@ export default class App extends Component<IAppProps, IAppState> {
     this.setState({ focusedNote: newFocusedNote });
   }
 
-  onNoteRightClick = (noteClicked: ITabNoteLocation, e: React.MouseEvent): void => { }
+  onNoteRightClick = (newFocusedNote: ITabNoteLocation, e: React.MouseEvent): void => { }
 
   onReset = (): void => {
     window.localStorage.removeItem(this.tabsKey);
