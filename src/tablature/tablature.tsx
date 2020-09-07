@@ -121,7 +121,7 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
 
   private insertChord(e: KeyboardEvent): void {
     let newChords = [...this.props.chords];
-    newChords.splice(this.props.focusedNote!.chordIndex, 0, this.getAllNulls(6));
+    newChords.splice(this.props.focusedNote!.chordIndex, 0, this.getAllNulls(this.props.tuning.length));
 
     this.props.onEdit(newChords, this.props.focusedNote!, e);
   }

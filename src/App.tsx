@@ -69,21 +69,23 @@ export default class App extends Component<IAppProps, IAppState> {
   }
 
   private getInitialState(): IAppState {
+    const tuning: INote[] = [
+      { letter: NoteLetter.E, octave: 4 },
+      { letter: NoteLetter.B, octave: 3 },
+      { letter: NoteLetter.G, octave: 3 },
+      { letter: NoteLetter.D, octave: 3 },
+      { letter: NoteLetter.A, octave: 2 },
+      { letter: NoteLetter.E, octave: 2 }
+    ];
+
     return {
       isFocused: false,
-      chords: this.getEmptyChords(16, 6),
+      chords: this.getEmptyChords(16, tuning.length),
       focusedNote: {
         chordIndex: 0,
         stringIndex: 0
       },
-      tuning: [
-        { letter: NoteLetter.E, octave: 4 },
-        { letter: NoteLetter.B, octave: 3 },
-        { letter: NoteLetter.G, octave: 3 },
-        { letter: NoteLetter.D, octave: 3 },
-        { letter: NoteLetter.A, octave: 2 },
-        { letter: NoteLetter.E, octave: 2 },
-      ],
+      tuning: tuning,
       maxFretNum: 24,
       mapFromNoteLetterEnumToString: new Map(
         [
