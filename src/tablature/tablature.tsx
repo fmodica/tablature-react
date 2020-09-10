@@ -1,11 +1,14 @@
 import React, { PureComponent } from 'react';
-import './tablature.css';
+import ReactDOM from 'react-dom';
 import { Chord } from './chord';
+import './tablature.css';
 
 export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
+  private editorRef: React.RefObject<HTMLDivElement>;
+
   constructor(props: ITablatureProps) {
     super(props);
-    this.state = { editorIsFocused: false };
+    this.editorRef = React.createRef();
   }
 
   render(): JSX.Element {
@@ -15,9 +18,11 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
     // To get around TS errors
     const tabIndexAttr = { tabIndex: 0 };
 
+    this.setEditorFocusIfNeeded();
+
     return (
       <div className='tablature-container'>
-        <div className='tablature' {...tabIndexAttr} onFocus={this.onFocus} onBlur={this.onBlur}>
+        <div className='tablature' {...tabIndexAttr} onFocus={this.onFocus} onBlur={this.onBlur} ref={this.editorRef}>
           {tuningDisplay}
           {chordsDisplay}
         </div>
@@ -78,16 +83,19 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
     });
   }
 
-  private onFocus = (): void => {
+  private onFocus = (e: React.FocusEvent): void => {
     // Hack: The focus event fires and renders before the click event renders the newly focused note. So
     // there is a moment where the initial focused note is shown.
     setTimeout(() => {
-      this.setState({ editorIsFocused: true });
+      this.props.onEditorFocus(true, e);
     }, 100);
   };
 
-  private onBlur = (): void => {
-    this.setState({ editorIsFocused: false });
+  private onBlur = (e: React.FocusEvent): void => {
+    // To be consistent with the onFocus method
+    setTimeout(() => {
+      this.props.onEditorFocus(false, e);
+    });
   };
 
   private onKeyDown = (e: KeyboardEvent): void => {
@@ -235,8 +243,23 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
     return newFretAsNumber;
   }
 
+  private setEditorFocusIfNeeded() {
+    setTimeout(() => {
+      if (this.props.editorIsFocused) {
+        if (document.activeElement !== ReactDOM.findDOMNode(this.editorRef.current)) {
+          this.editorRef.current?.focus();
+        }
+      }
+      else {
+        if (document.activeElement === ReactDOM.findDOMNode(this.editorRef.current)) {
+          this.editorRef.current?.blur();
+        }
+      }
+    }, 100);
+  }
+
   private editorAndNoteAreFocused(): boolean {
-    return this.state.editorIsFocused && !!this.props.focusedNote;
+    return this.props.editorIsFocused && !!this.props.focusedNote;
   }
 
   private getAllNulls(numFrets: number): null[] {
@@ -264,11 +287,10 @@ export interface INote {
   octave: number;
 }
 
-interface ITablatureState {
-  editorIsFocused: boolean;
-}
+interface ITablatureState { }
 
 export interface ITablatureProps {
+  editorIsFocused: boolean;
   chords: (number | null)[][];
   tuning: INote[];
   maxFretNum: number;
@@ -278,6 +300,7 @@ export interface ITablatureProps {
   onEdit: (newChords: (number | null)[][], newFocusedNote: ITabNoteLocation, e: KeyboardEvent) => void;
   onNoteClick: (newFocusedNote: ITabNoteLocation, e: React.MouseEvent) => void;
   onNoteRightClick: (newFocusedNote: ITabNoteLocation, e: React.MouseEvent) => void;
+  onEditorFocus: (isFocused: boolean, e: React.FocusEvent) => void;
 }
 
 export interface ITabNoteLocation {

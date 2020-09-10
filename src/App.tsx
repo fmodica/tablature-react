@@ -17,6 +17,7 @@ export default class App extends Component<IAppProps, IAppState> {
         <button className='reset-btn' onClick={this.onReset}>Reset</button>
 
         <Tablature
+          editorIsFocused={this.state.editorIsFocused}
           chords={this.state.chords}
           tuning={this.state.tuning}
           maxFretNum={this.state.maxFretNum}
@@ -26,6 +27,7 @@ export default class App extends Component<IAppProps, IAppState> {
           onEdit={this.onEdit}
           onNoteClick={this.onNoteClick}
           onNoteRightClick={this.onNoteRightClick}
+          onEditorFocus={this.onEditorFocus}
         ></Tablature>
       </div>
     );
@@ -63,6 +65,10 @@ export default class App extends Component<IAppProps, IAppState> {
 
   onNoteRightClick = (newFocusedNote: ITabNoteLocation, e: React.MouseEvent): void => { }
 
+  onEditorFocus = (isFocused: boolean, e: React.FocusEvent): void => {
+    this.setState({ editorIsFocused: isFocused });
+  }
+
   onReset = (): void => {
     window.localStorage.removeItem(this.tabsKey);
     this.setState(this.getInitialState());
@@ -79,7 +85,7 @@ export default class App extends Component<IAppProps, IAppState> {
     ];
 
     return {
-      isFocused: false,
+      editorIsFocused: true,
       chords: this.getEmptyChords(16, tuning.length),
       focusedNote: {
         chordIndex: 0,
@@ -118,7 +124,7 @@ export default class App extends Component<IAppProps, IAppState> {
 interface IAppProps { }
 
 interface IAppState {
-  isFocused: boolean;
+  editorIsFocused: boolean;
   chords: (number | null)[][];
   focusedNote: ITabNoteLocation | null;
   tuning: INote[];
