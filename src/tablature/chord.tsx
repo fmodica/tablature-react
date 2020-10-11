@@ -2,8 +2,16 @@ import React, { PureComponent } from 'react';
 
 export class Chord extends PureComponent<IChordProps, IChordState> {
   render(): JSX.Element {
-    const fretElements: JSX.Element[] = this.props.notes.map((fret, stringIndex) => {
-      return <div key={stringIndex}>{this.getFretElement(stringIndex, fret)}</div>;
+    const needsBar = this.props.notesPerMeasure !== null
+      && this.props.notesPerMeasure !== 0
+      && ((this.props.chordIndex + 1) % this.props.notesPerMeasure === 0);
+
+    const fretElements: JSX.Element[] = this.props.notes.map((fret: number | null, stringIndex: number) => {
+      const cssClass = `fret-container ${needsBar ? 'bar' : ''}`;
+
+      return (
+        <div className={cssClass} key={stringIndex}>{this.getFretElement(stringIndex, fret)}</div>
+      );
     });
 
     return (
@@ -14,7 +22,7 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
   }
 
   private getFretElement(stringIndex: number, fret: number | null): JSX.Element {
-    const isFocused: boolean = stringIndex === this.props.indexOfFocusedString;
+    const isFocused: boolean = stringIndex === this.props.focusedStringIndex;
     const className: string = 'fret' + (isFocused ? ' blink' : '');
 
     const fretNumDisplay = fret === null
@@ -34,8 +42,9 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
 
 export interface IChordProps {
   chordIndex: number;
-  indexOfFocusedString: number | null;
+  focusedStringIndex: number | null;
   notes: (number | null)[];
+  notesPerMeasure: number | null;
   onNoteClick: (chordIndex: number, stringIndex: number, e: React.MouseEvent) => void;
   onNoteRightClick: (chordIndex: number, stringIndex: number, e: React.MouseEvent) => void;
 }

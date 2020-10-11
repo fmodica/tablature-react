@@ -20,9 +20,10 @@ export default class App extends Component<IAppProps, IAppState> {
           editorIsFocused={this.state.editorIsFocused}
           chords={this.state.chords}
           tuning={this.state.tuning}
+          focusedNote={this.state.focusedNote}
           maxFretNum={this.state.maxFretNum}
           mapFromNoteLetterEnumToString={this.state.mapFromNoteLetterEnumToString}
-          focusedNote={this.state.focusedNote}
+          notesPerMeasure={this.state.notesPerMeasure}
           onKeyBoardNavigation={this.onKeyBoardNavigation}
           onEdit={this.onEdit}
           onNoteClick={this.onNoteClick}
@@ -108,7 +109,8 @@ export default class App extends Component<IAppProps, IAppState> {
           [NoteLetter.Gflat, 'F#'],
           [NoteLetter.G, 'G']
         ]
-      )
+      ),
+      notesPerMeasure: 8
     };
   }
 
@@ -126,8 +128,9 @@ interface IAppProps { }
 interface IAppState {
   editorIsFocused: boolean;
   chords: (number | null)[][];
-  focusedNote: ITabNoteLocation | null;
   tuning: INote[];
+  focusedNote: ITabNoteLocation | null;
   maxFretNum: number;
   mapFromNoteLetterEnumToString: Map<NoteLetter, string>;
+  notesPerMeasure: number | null;
 }

@@ -67,7 +67,7 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
 
   private getChordElements(): JSX.Element[] {
     return this.props.chords.map((chord, chordIndex) => {
-      const indexOfFocusedString = (this.editorAndNoteAreFocused() && chordIndex === this.props.focusedNote!.chordIndex)
+      const focusedStringIndex = (this.editorAndNoteAreFocused() && chordIndex === this.props.focusedNote!.chordIndex)
         ? this.props.focusedNote!.stringIndex
         : null;
 
@@ -75,8 +75,9 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
         <Chord
           key={chordIndex}
           chordIndex={chordIndex}
-          indexOfFocusedString={indexOfFocusedString}
+          focusedStringIndex={focusedStringIndex}
           notes={chord}
+          notesPerMeasure={this.props.notesPerMeasure}
           onNoteClick={this.onNoteClick}
           onNoteRightClick={this.onNoteRightClick} />
       );
@@ -293,9 +294,10 @@ export interface ITablatureProps {
   editorIsFocused: boolean;
   chords: (number | null)[][];
   tuning: INote[];
+  focusedNote: ITabNoteLocation | null;
   maxFretNum: number;
   mapFromNoteLetterEnumToString: Map<NoteLetter, string>;
-  focusedNote: ITabNoteLocation | null;
+  notesPerMeasure: number | null;
   onKeyBoardNavigation: (newFocusedNote: ITabNoteLocation, e: KeyboardEvent) => void;
   onEdit: (newChords: (number | null)[][], newFocusedNote: ITabNoteLocation, e: KeyboardEvent) => void;
   onNoteClick: (newFocusedNote: ITabNoteLocation, e: React.MouseEvent) => void;

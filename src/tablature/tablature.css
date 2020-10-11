@@ -16,6 +16,10 @@
   margin-bottom: 40px;
 }
 
+.tablature .fret-container.bar {
+  border-right: 1px solid black;
+}
+
 .tablature .fret {
   margin: 5px;
   cursor: pointer;
