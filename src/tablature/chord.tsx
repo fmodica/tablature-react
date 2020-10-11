@@ -32,8 +32,7 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
     return (
       <div
         className={className}
-        onClick={e => this.props.onNoteClick(this.props.chordIndex, stringIndex, e)}
-        onContextMenu={e => this.props.onNoteRightClick(this.props.chordIndex, stringIndex, e)}>
+        onClick={e => this.props.onNoteClick(this.props.chordIndex, stringIndex, e)}>
         {fretNumDisplay}
       </div>
     );
@@ -46,7 +45,6 @@ export interface IChordProps {
   notes: (number | null)[];
   notesPerMeasure: number | null;
   onNoteClick: (chordIndex: number, stringIndex: number, e: React.MouseEvent) => void;
-  onNoteRightClick: (chordIndex: number, stringIndex: number, e: React.MouseEvent) => void;
 }
 
 interface IChordState { }

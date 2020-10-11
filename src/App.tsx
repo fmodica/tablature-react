@@ -27,7 +27,6 @@ export default class App extends Component<IAppProps, IAppState> {
           onKeyBoardNavigation={this.onKeyBoardNavigation}
           onEdit={this.onEdit}
           onNoteClick={this.onNoteClick}
-          onNoteRightClick={this.onNoteRightClick}
           onEditorFocus={this.onEditorFocus}
         ></Tablature>
       </div>
@@ -63,8 +62,6 @@ export default class App extends Component<IAppProps, IAppState> {
   onNoteClick = (newFocusedNote: ITabNoteLocation, e: React.MouseEvent): void => {
     this.setState({ focusedNote: newFocusedNote });
   }
-
-  onNoteRightClick = (newFocusedNote: ITabNoteLocation, e: React.MouseEvent): void => { }
 
   onEditorFocus = (isFocused: boolean, e: React.FocusEvent): void => {
     this.setState({ editorIsFocused: isFocused });

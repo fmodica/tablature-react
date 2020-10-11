@@ -43,11 +43,6 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
     this.props.onNoteClick(newFocusedNote, e);
   };
 
-  onNoteRightClick = (chordIndex: number, stringIndex: number, e: React.MouseEvent): void => {
-    const newFocusedNote: ITabNoteLocation = { chordIndex, stringIndex };
-    this.props.onNoteRightClick(newFocusedNote, e);
-  };
-
   private getTuningElement(): JSX.Element {
     const tuningNotesDisplay = this.getTuningNoteElements();
 
@@ -78,8 +73,7 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
           focusedStringIndex={focusedStringIndex}
           notes={chord}
           notesPerMeasure={this.props.notesPerMeasure}
-          onNoteClick={this.onNoteClick}
-          onNoteRightClick={this.onNoteRightClick} />
+          onNoteClick={this.onNoteClick} />
       );
     });
   }
@@ -301,7 +295,6 @@ export interface ITablatureProps {
   onKeyBoardNavigation: (newFocusedNote: ITabNoteLocation, e: KeyboardEvent) => void;
   onEdit: (newChords: (number | null)[][], newFocusedNote: ITabNoteLocation, e: KeyboardEvent) => void;
   onNoteClick: (newFocusedNote: ITabNoteLocation, e: React.MouseEvent) => void;
-  onNoteRightClick: (newFocusedNote: ITabNoteLocation, e: React.MouseEvent) => void;
   onEditorFocus: (isFocused: boolean, e: React.FocusEvent) => void;
 }
 
