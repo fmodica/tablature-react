@@ -7,17 +7,16 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
       && ((this.props.chordIndex + 1) % this.props.notesPerMeasure === 0);
 
     const fretElements: JSX.Element[] = this.props.notes.map((fret: number | null, stringIndex: number) => {
-      const cssClass = `fret-container ${needsBar ? 'bar' : ''}`;
-
-      return (
-        <div className={cssClass} key={stringIndex}>{this.getFretElement(stringIndex, fret)}</div>
-      );
+      return this.getFretElement(stringIndex, fret);
     });
 
     return (
+      <>
       <div className='chord'>
         {fretElements}
       </div>
+      {needsBar ? <div className='bar'> </div> : null}
+      </>
     );
   }
 

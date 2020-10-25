@@ -13,15 +13,16 @@
   float: left;
   min-width: 30px;
   text-align: center;
-  margin-bottom: 40px;
 }
 
-.tablature .fret-container.bar {
-  border-right: 1px solid black;
+.tablature .bar {
+  width: 1px;
+  margin: 0px 8px;
+  background: black;
 }
 
 .tablature .fret {
-  padding: 5px;
+  padding: 2px;
   cursor: pointer;
 }
 
