@@ -28,7 +28,7 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
       ? <span>{isFocused ? '_' : '-'}</span> :
       <span>{fret}</span>;
 
-    const key: string = `${stringIndex}|${fret === null ? '' : fret}`;
+    const key: string = `${stringIndex}-${fret === null ? '' : fret}`;
 
     return (
       <div

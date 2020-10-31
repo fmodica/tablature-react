@@ -1,3 +1,4 @@
+import { exception } from 'console';
 import React, { PureComponent } from 'react';
 import ReactDOM from 'react-dom';
 import { Chord } from './chord';
@@ -64,11 +65,16 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
 
   private getChordElements(): JSX.Element[] {
     return this.props.chords.map((chord, chordIndex) => {
+      if (chord.length !== this.props.tuning.length) {
+        throw new Error(`The chord at index ${chordIndex} has ${chord.length} notes, but the tuning array has ${this.props.tuning.length} notes: [${chord}]`);
+      }
+
       const focusedStringIndex: number | null = (this.editorAndNoteAreFocused() && chordIndex === this.props.focusedNote!.chordIndex)
         ? this.props.focusedNote!.stringIndex
         : null;
 
-      const key: string = `${chordIndex}|${chord.join('|')}`;
+      // The entries of the chord array will be joined with commas
+      const key: string = `${chordIndex}-${chord}`;
 
       return (
         <Chord
