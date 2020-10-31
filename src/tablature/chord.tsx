@@ -12,10 +12,10 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
 
     return (
       <>
-      <div className='chord'>
-        {fretElements}
-      </div>
-      {needsBar ? <div className='bar'> </div> : null}
+        <div className='chord'>
+          {fretElements}
+        </div>
+        {needsBar ? <div className='bar'> </div> : null}
       </>
     );
   }
@@ -26,11 +26,14 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
 
     const fretNumDisplay = fret === null
       ? <span>{isFocused ? '_' : '-'}</span> :
-      fret;
+      <span>{fret}</span>;
+
+    const key: string = `${stringIndex}|${fret === null ? '' : fret}`;
 
     return (
       <div
         className={className}
+        key={key}
         onClick={e => this.props.onNoteClick(this.props.chordIndex, stringIndex, e)}>
         {fretNumDisplay}
       </div>

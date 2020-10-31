@@ -56,19 +56,23 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
   private getTuningNoteElements(): JSX.Element[] {
     return this.props.tuning.map((tuningNote, index) => {
       const noteLetterDisplay = this.props.mapFromNoteLetterEnumToString.get(tuningNote.letter);
-      return <div className='fret' key={index}>{noteLetterDisplay}</div>;
+      const key = `${index}|${tuningNote.letter}|${tuningNote.octave}`;
+
+      return <div className='fret' key={key}>{noteLetterDisplay}</div>;
     });
   }
 
   private getChordElements(): JSX.Element[] {
     return this.props.chords.map((chord, chordIndex) => {
-      const focusedStringIndex = (this.editorAndNoteAreFocused() && chordIndex === this.props.focusedNote!.chordIndex)
+      const focusedStringIndex: number | null = (this.editorAndNoteAreFocused() && chordIndex === this.props.focusedNote!.chordIndex)
         ? this.props.focusedNote!.stringIndex
         : null;
 
+      const key: string = `${chordIndex}|${chord.join('|')}`;
+
       return (
         <Chord
-          key={chordIndex}
+          key={key}
           chordIndex={chordIndex}
           focusedStringIndex={focusedStringIndex}
           notes={chord}
