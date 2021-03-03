@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Tablature, ITabNoteLocation, INote, NoteLetter } from './tablature/tablature';
+import { Tablature, ITabNoteLocation, INote, NoteLetter, IChord } from './tablature/tablature';
 import './App.css';
 
 export default class App extends Component<IAppProps, IAppState> {
   private tabsKey = 'tabs';
+  private id = 0;
 
   constructor(props: IAppProps) {
     super(props);
@@ -28,6 +29,7 @@ export default class App extends Component<IAppProps, IAppState> {
           onEdit={this.onEdit}
           onNoteClick={this.onNoteClick}
           onEditorFocus={this.onEditorFocus}
+          getUniqueId={this.getUniqueId}
         ></Tablature>
       </div>
     );
@@ -40,7 +42,7 @@ export default class App extends Component<IAppProps, IAppState> {
       return;
     }
 
-    const chords: (number | null)[][] = JSON.parse(savedChordsStr);
+    const chords: IChord[] = JSON.parse(savedChordsStr);
 
     this.setState({ chords: chords });
   }
@@ -54,7 +56,7 @@ export default class App extends Component<IAppProps, IAppState> {
     this.setState({ focusedNote: newFocusedNote });
   }
 
-  onEdit = (newChords: (number | null)[][], newFocusedNote: ITabNoteLocation): void => {
+  onEdit = (newChords: IChord[], newFocusedNote: ITabNoteLocation): void => {
     this.setState({ chords: newChords, focusedNote: newFocusedNote });
     window.localStorage.setItem(this.tabsKey, JSON.stringify(newChords));
   }
@@ -65,6 +67,10 @@ export default class App extends Component<IAppProps, IAppState> {
 
   onEditorFocus = (isFocused: boolean, e: React.FocusEvent): void => {
     this.setState({ editorIsFocused: isFocused });
+  }
+
+  getUniqueId = (): string => {
+    return (this.id++).toString();
   }
 
   onReset = (): void => {
@@ -107,16 +113,31 @@ export default class App extends Component<IAppProps, IAppState> {
           [NoteLetter.G, 'G']
         ]
       ),
-      notesPerMeasure: 8
+      notesPerMeasure: 16
     };
   }
 
-  private getEmptyChords(numChords: number, numFrets: number): null[][] {
-    return new Array(numChords).fill(this.getAllNulls(numFrets));
+  private getEmptyChords(numChords: number, numFrets: number): IChord[] {
+    const chords: IChord[] = [];
+
+    for (let i = 0; i < numChords; i++) {
+      chords.push(this.getNullChord(numFrets));
+    }
+
+    return chords;
   }
 
-  private getAllNulls = (numFrets: number): null[] => {
-    return new Array(numFrets).fill(null);
+  private getNullChord = (numFrets: number): IChord => {
+    const chord: IChord = {
+      id: this.getUniqueId(),
+      frets: []
+    };
+
+    for (let i = 0; i < numFrets; i++) {
+      chord.frets.push(null);
+    }
+
+    return chord;
   }
 }
 
@@ -124,7 +145,7 @@ interface IAppProps { }
 
 interface IAppState {
   editorIsFocused: boolean;
-  chords: (number | null)[][];
+  chords: IChord[];
   tuning: INote[];
   focusedNote: ITabNoteLocation | null;
   maxFretNum: number;

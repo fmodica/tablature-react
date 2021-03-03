@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
+import { IChord } from './tablature';
 
 export class Chord extends PureComponent<IChordProps, IChordState> {
   render(): JSX.Element {
-    const needsBar = this.props.notesPerMeasure !== null
+    const needsBar: boolean = this.props.notesPerMeasure !== null
       && this.props.notesPerMeasure !== 0
       && ((this.props.chordIndex + 1) % this.props.notesPerMeasure === 0);
 
-    const fretElements: JSX.Element[] = this.props.notes.map((fret: number | null, stringIndex: number) => {
+    const fretElements: JSX.Element[] = this.props.notes.frets.map((fret: number | null, stringIndex: number) => {
       return this.getFretElement(stringIndex, fret);
     });
 
@@ -24,7 +25,7 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
     const isFocused: boolean = stringIndex === this.props.focusedStringIndex;
     const className: string = 'fret' + (isFocused ? ' blink' : '');
 
-    const fretNumDisplay = fret === null
+    const fretNumDisplay: JSX.Element = fret === null
       ? <span>{isFocused ? '_' : '-'}</span> :
       <span>{fret}</span>;
 
@@ -44,7 +45,7 @@ export class Chord extends PureComponent<IChordProps, IChordState> {
 export interface IChordProps {
   chordIndex: number;
   focusedStringIndex: number | null;
-  notes: (number | null)[];
+  notes: IChord;
   notesPerMeasure: number | null;
   onNoteClick: (chordIndex: number, stringIndex: number, e: React.MouseEvent) => void;
 }
