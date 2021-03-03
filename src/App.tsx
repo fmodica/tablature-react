@@ -3,7 +3,6 @@ import { Tablature, ITabNoteLocation, INote, NoteLetter, IChord } from './tablat
 import './App.css';
 
 export default class App extends Component<IAppProps, IAppState> {
-  private tabsKey = 'tabs';
   private id = 0;
 
   constructor(props: IAppProps) {
@@ -35,18 +34,6 @@ export default class App extends Component<IAppProps, IAppState> {
     );
   }
 
-  componentDidMount(): void {
-    const savedChordsStr = window.localStorage.getItem(this.tabsKey);
-
-    if (!savedChordsStr) {
-      return;
-    }
-
-    const chords: IChord[] = JSON.parse(savedChordsStr);
-
-    this.setState({ chords: chords });
-  }
-
   onKeyBoardNavigation = (newFocusedNote: ITabNoteLocation, e: KeyboardEvent): void => {
     e.preventDefault();
     this.setState({ focusedNote: newFocusedNote })
@@ -58,7 +45,6 @@ export default class App extends Component<IAppProps, IAppState> {
 
   onEdit = (newChords: IChord[], newFocusedNote: ITabNoteLocation): void => {
     this.setState({ chords: newChords, focusedNote: newFocusedNote });
-    window.localStorage.setItem(this.tabsKey, JSON.stringify(newChords));
   }
 
   onNoteClick = (newFocusedNote: ITabNoteLocation, e: React.MouseEvent): void => {
@@ -74,7 +60,6 @@ export default class App extends Component<IAppProps, IAppState> {
   }
 
   onReset = (): void => {
-    window.localStorage.removeItem(this.tabsKey);
     this.setState(this.getInitialState());
   }
 
@@ -90,7 +75,7 @@ export default class App extends Component<IAppProps, IAppState> {
 
     return {
       editorIsFocused: true,
-      chords: this.getEmptyChords(16, tuning.length),
+      chords: this.getEmptyChords(64, tuning.length),
       focusedNote: {
         chordIndex: 0,
         stringIndex: 0
