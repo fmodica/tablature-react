@@ -252,7 +252,7 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
     return newFretAsNumber;
   }
 
-  private setEditorFocusIfNeeded() {
+  private setEditorFocusIfNeeded(): void {
     setTimeout(() => {
       if (this.props.editorIsFocused) {
         if (document.activeElement !== ReactDOM.findDOMNode(this.editorRef.current)) {
@@ -271,7 +271,7 @@ export class Tablature extends PureComponent<ITablatureProps, ITablatureState> {
     return this.props.editorIsFocused && !!this.props.focusedNote;
   }
 
-  private getNullChord = (numFrets: number): IChord => {
+  private getNullChord(numFrets: number): IChord {
     const chord: IChord = {
       id: this.props.getUniqueId(),
       frets: []

@@ -127,7 +127,7 @@ export default class App extends Component<IAppProps, IAppState> {
     return chords;
   }
 
-  private getNullChord = (numFrets: number): IChord => {
+  private getNullChord(numFrets: number): IChord {
     const chord: IChord = {
       id: this.getUniqueId(),
       frets: []
